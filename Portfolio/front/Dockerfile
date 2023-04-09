@@ -9,10 +9,6 @@ RUN     apk update && apk add bash npm
 
 RUN		npm install --force
 
-RUN      npm install -g n
-RUN      n stable
-RUN      n 16.19.1
-
 COPY	./ ./
 
 EXPOSE	3000
