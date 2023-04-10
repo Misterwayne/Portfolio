@@ -14,10 +14,11 @@ COPY	./ ./
 
 RUN     npm install -g pg
 RUN     npm install -g pg-hstore
+RUN     npm install -g nodemon
 
 RUN		npm install --force
 
 
 EXPOSE	3001
 
-CMD		npm start
+CMD		nodemon start

@@ -60,7 +60,6 @@ const pool = new Pool.Pool({
     host: 'db-server',
     database: 'psql',
     password: 'MWANE',
-    dialect: 'postgres',
     port: 5432
 });
 
@@ -76,6 +75,7 @@ pool.connect((err, client, release) => {
                 'Error executing query', err.stack)
         }
         console.log("Connected to Database !!!!")
+        console.log(result);
     })
 })
 
