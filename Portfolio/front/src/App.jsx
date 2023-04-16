@@ -14,6 +14,7 @@ import ModalComp from "./component/ModalCompetence";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import LoginModal from "./component/LoginModal";
+import RegisterModal from './component/RegisterModal';
 
 function App() {
 
@@ -39,7 +40,7 @@ function App() {
         }
         catch (error)
         {
-            console.log("error: exp failed")
+            console.log("error: api connection failed")
         }
     }
 
@@ -57,6 +58,7 @@ function App() {
 				<Contact/>
 				</div>
 				<LoginModal/>
+				<RegisterModal/>
 			</div>
 			</div>
 		</div>
@@ -67,11 +69,10 @@ function App() {
 		  </div>
 		  {isLogged
 			?
-				<div>
-
-		  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modalcomp">
-  			Ajouter competence
-		  </button>
+			<div>
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modalcomp">
+  				Ajouter competence
+		  	</button>
 		   <ModalComp/>
 		   </div>:
 		   <p></p>

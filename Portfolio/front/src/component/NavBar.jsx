@@ -36,17 +36,22 @@ function NavBar({logged})
                     <a class="nav-link" href="#formation">Formation</a>
                     </li>
                     <li className='nav-item ml-auto'>
+                    </li>
+                    </ul>
                     {logged ?
                         <button type="button" class="btn btn-primary" onClick={() => Logout()}>
   			            Logout
 		                </button>
                             :
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modallogin">
-  			            Login
-		                </button>
+                        <div>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Modallogin">
+  			                Login
+		                    </button>
+                        <button type="button" class="btn btn-primary m-1" data-bs-toggle="modal" data-bs-target="#Modalregister">
+                            Register
+                        </button>
+                        </div>
                     }
-                    </li>
-                </ul>
                 </div>
             </div>
         </nav>

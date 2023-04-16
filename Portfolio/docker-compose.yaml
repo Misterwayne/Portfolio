@@ -39,6 +39,8 @@ services:
 
   backend:
     container_name: backend
+    depends_on:
+      - db-server
     build:
       context: ./back
     image: img_backend
@@ -46,7 +48,4 @@ services:
       - ./back/data:/app/data
     ports:
       - 3001:3001
-    depends_on:
-      db-server:
-        condition: service_started
     restart: unless-stopped

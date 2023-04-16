@@ -1,36 +1,115 @@
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const Pool = require('pg');
 
-const jwtKey = 'my_secret_key'
+const jwtKey = 'my_secret_key';
 const jwtExpirySeconds = 300
 
-const users = {
-  user1: 'password1',
-  user2: 'password2'
+
+const pool = new Pool.Pool({
+  user: 'mwane',
+  host: 'db-server',
+  database: 'psql',
+  password: 'MWANE',
+  port: 5432
+});
+
+pool.connect((err, client, release) => {
+  if (err) {
+    return console.error(
+        'Error acquiring client', err.stack)
+  }
+  console.log("Connected to Database !!!!")
+  pool.query(`CREATE TABLE "users" (
+            id INT,
+            username VARCHAR(20),
+            password VARCHAR(20),
+            email VARCHAR(20)
+          );`,
+    (err, res) =>{
+      release();
+      if (err)
+      {
+          return;
+      }
+      console.log('Table "users" created');
+      pool.query(`INSERT INTO users (id, username, password, email)
+                  VALUES (1, 'Malick', '1234', 'mwane@student.42.fr');`, (err, res) => {
+        if (err)
+        {
+            console.log(err);
+            return;
+        }
+        console.log(`User "Malick" added`);
+      })
+    })
+})
+
+var tmp = "";
+
+const setOutput = (rows) => {
+  tmp = rows;
+  console.log(tmp);
 }
 
-const signIn = (req, res) => {
-  // Get credentials from JSON body
-  const { username, password } = req.body
-  if (!username || !password || users[username] !== password) {
-    // return 401 error is username or password doesn't exist, or if password does
-    // not match the password in our records
-    return res.status(401).end()
+const register = async (res, req) => {
+  const { username, password, email} = req.body;
+  console.log(username)
+  console.log(password)
+  console.log(email)
+  if (!username || !password || !email)
+    return res.status(402).end();
+  try {
+      pool.query(`INSERT INTO users (id, username, password, email)
+      VALUES (${id}, '${username}', '${password}', '${email}');`, (err, res) => {
+      if (err)
+      {
+        console.log(err);
+        return;
+      }
+      console.log(`User ${username} added`);
+      })
   }
+  catch (e){
+    console.log(e);
+    return res.status(402).end();
+  }
+}
 
-  // Create a new token with the username in the payload
-  // and which expires 300 seconds after issue
+
+const signIn = async (req, res) => {
+  const { username, password } = req.body
+  try {
+    const data = await pool.query(`Select password from users WHERE username='${username}'`)
+    if (data){
+      setOutput(Object.values(data.rows[0]));
+    }
+  }
+  catch (e)
+  {
+    console.error(e);
+  }
+  console.log(`tmp = ${tmp} | password = ${password}`)
+  if (tmp != password) {
+      // return 401 error is username or password doesn't exist, or if password does
+      // not match the password in our records
+      console.log('failed to connect');
+      return res.status(401).end()
+  }
+    // Create a new token with the username in the payload
+    // and which expires 300 seconds after issue
   const token = jwt.sign({ username }, jwtKey, {
-    algorithm: 'HS256',
-    expiresIn: jwtExpirySeconds
+      algorithm: 'HS256',
+      expiresIn: jwtExpirySeconds
   })
-  // set the cookie as the token string, with a similar max age as the token
-  // here, the max age is in milliseconds, so we multiply by 1000
+    // set the cookie as the token string, with a similar max age as the token
+    // here, the max age is in milliseconds, so we multiply by 1000
   res.header('Access-Control-Allow-Origin', "http://localhost:3000");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header('Access-Control-Allow-Credentials',true);
   res.header('Access-Control-Allow-Credentials', "POST");
   res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 })
-  res.end()
+  console.log("Logged in !!");
+  res.end();
 }
 
 const welcome = (req, res) => {
@@ -40,6 +119,7 @@ const welcome = (req, res) => {
   console.log("check if logged");
   // if the cookie is not set, return an unauthorized error
   if (!token) {
+    console.log("failed to log");
     return res.status(401).end()
   }
 
@@ -113,5 +193,6 @@ module.exports = {
   signIn,
   welcome,
   refresh,
-  logout
+  logout,
+  register
 }
