@@ -7,9 +7,11 @@ COPY	./package-lock.json ./
 
 RUN     apk update && apk add bash npm
 
+COPY	./ ./
+
+
 RUN		npm install --force
 
-COPY	./ ./
 
 EXPOSE	3000
 
