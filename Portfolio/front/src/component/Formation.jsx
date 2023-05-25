@@ -27,7 +27,17 @@ function Formation()
     }
     return (
         <div className="container">
-            <h1>Formation</h1>
+             <div class="waviy">
+                <span style={{"--i":1}}>F</span>
+                <span style={{"--i":2}}>O</span>
+                <span style={{"--i":3}}>R</span>
+                <span style={{"--i":4}}>M</span>
+                <span style={{"--i":5}}>A</span>
+                <span style={{"--i":6}}>T</span>
+                <span style={{"--i":7}}>I</span>
+                <span style={{"--i":8}}>O</span>
+                <span style={{"--i":9}}>N</span>
+            </div>
             <div className="row">
             {Form.map(({name, school, date, adress}) => {
                 return (

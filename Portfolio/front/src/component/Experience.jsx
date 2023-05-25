@@ -1,5 +1,6 @@
 import "../css/text-animation.css"
 import React from 'react';
+import "../css/fullpage.css"
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -28,7 +29,7 @@ function Experience()
     }
 
     return (
-        <div className="container bg-dark p-5">
+        <div className="profile">
             <div class="waviy">
                 <span style={{"--i":1}}>E</span>
                 <span style={{"--i":2}}>X</span>
@@ -45,8 +46,8 @@ function Experience()
                 {console.log(Jobs)}
             {Jobs.map( data => {
                 return (
-                    <div className="col" key={data.job}>
-                        <div className="card">
+                    <div className="col " key={data.job}>
+                        <div className="card" style={{overflow: "hidden", height: 300, width: 300}}>
                             <div className="card-body">
                                 <h5 className="card-title">{data.job}</h5>
                                 <h6 className="card-subtitle mb-2 text-muted">{data.company}</h6>

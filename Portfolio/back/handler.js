@@ -19,53 +19,48 @@ pool.connect((err, client, release) => {
         'Error acquiring client', err.stack)
   }
   console.log("Connected to Database !!!!")
-  pool.query(`CREATE TABLE "users" (
-            id INT,
-            username VARCHAR(20),
-            password VARCHAR(20),
-            email VARCHAR(20)
-          );`,
-    (err, res) =>{
-      release();
-      if (err)
-      {
-          return;
-      }
-      console.log('Table "users" created');
-      pool.query(`INSERT INTO users (id, username, password, email)
-                  VALUES (1, 'Malick', '1234', 'mwane@student.42.fr');`, (err, res) => {
-        if (err)
-        {
-            console.log(err);
-            return;
-        }
-        console.log(`User "Malick" added`);
-      })
-    })
 })
 
-var tmp = "";
+var idnbr = 0;
 
+const incId = () => {
+  idnbr += 1;
+  console.log(idnbr);
+}
+
+
+var tmp = "";
+var tmpRole = "";
 const setOutput = (rows) => {
   tmp = rows;
   console.log(tmp);
 }
 
-const register = async (res, req) => {
-  const { username, password, email} = req.body;
+const setRoles = (rows) => {
+  tmpRole = rows;
+  console.log(tmp);
+}
+
+const register = async (req, res) => {
+  console.log(req.body);
+
+  const { id, username, password, email} = req.body;
+  console.log("API call for regiter")
   console.log(username)
   console.log(password)
   console.log(email)
-  if (!username || !password || !email)
+  if (!username || !password || !email){
     return res.status(402).end();
+  }
   try {
-      pool.query(`INSERT INTO users (id, username, password, email)
-      VALUES (${id}, '${username}', '${password}', '${email}');`, (err, res) => {
+      pool.query(`INSERT INTO usersList (id, username, password, email, role)
+      VALUES (${idnbr + 1}, '${username}', '${password}', '${email}', 'visiteur');`, (err, res) => {
       if (err)
       {
         console.log(err);
         return;
       }
+      incId();
       console.log(`User ${username} added`);
       })
   }
@@ -77,10 +72,10 @@ const register = async (res, req) => {
 
 
 const signIn = async (req, res) => {
-  const { username, password } = req.body
+  const { username, password} = req.body
   try {
-    const data = await pool.query(`Select password from users WHERE username='${username}'`)
-    if (data){
+    const data = await pool.query(`Select password from usersList WHERE username='${username}'`)
+    if (data.rows[0]){
       setOutput(Object.values(data.rows[0]));
     }
   }
@@ -107,6 +102,7 @@ const signIn = async (req, res) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header('Access-Control-Allow-Credentials',true);
   res.header('Access-Control-Allow-Credentials', "POST");
+  res.setHeader('Set-Cookie', token);
   res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000 })
   console.log("Logged in !!");
   res.end();
@@ -145,6 +141,28 @@ const welcome = (req, res) => {
   res.send(`Welcome ${payload.username}!`)
 }
 
+const role = async(req, res) => {
+  const {username} = req.body;
+  try{
+    const data = await pool.query(`Select role from usersList WHERE username='${username}'`)
+    if (data.rows[0]){
+      setRoles(Object.values(data.rows[0]));
+    }
+  }
+  catch(e){
+    console.error(e);
+  }
+  if (tmpRole === "admin")
+  {
+    console.log("admin");
+    res.send("admin");
+  }
+  else{
+    console.log("bot");
+    res.send("bot");
+  }
+}
+
 const refresh = (req, res) => {
   // (BEGIN) The code uptil this point is the same as the first part of the `welcome` route
   const token = req.cookies.token
@@ -178,7 +196,7 @@ const refresh = (req, res) => {
     expiresIn: jwtExpirySeconds
   })
 
-  // Set the new token as the users `token` cookie
+  // Set the new token as the usersList `token` cookie
   res.cookie('token', newToken, { maxAge: jwtExpirySeconds * 1000 })
   res.end()
 }
@@ -194,5 +212,6 @@ module.exports = {
   welcome,
   refresh,
   logout,
-  register
+  register,
+  role
 }

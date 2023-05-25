@@ -5,7 +5,7 @@ const cors = require('cors');
 const {getExp, postExp} = require("./reqExp");
 const {getCompt, postCompt} = require('./reqCompt');
 const {getForm, postForm} = require('./reqForm');
-const {signIn, welcome, logout, register} = require('./handler');
+const {signIn, welcome, logout, register, role} = require('./handler');
 const Pool = require('pg');
 
 const port = process.env.PORT || 3001;
@@ -26,6 +26,8 @@ app.use(cors({ origin:true, credentials:true }));
 app.get("/", (req, res) => {
     console.log('Default call')
 })
+
+app.get("/role", role);
 
 app.post("/register", register);
 

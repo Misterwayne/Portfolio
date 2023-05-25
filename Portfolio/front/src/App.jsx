@@ -1,5 +1,6 @@
 import './css/App.css';
 import './css/fullpage.css'
+import Arrow from "./images/right-arrow.png"
 import React from 'react';
 import NavBar from "./component/NavBar"
 import Contact from './component/Contacts';
@@ -28,29 +29,6 @@ function App() {
 
 	return (
 	<div className="App">
-	  <NavBar/>
-	  <div className='main'>
-		<div className="section">
-			<div className="container-fluid row" style={{height: 1000}}>
-				<div className="col">
-				{page[index]}
-				</div>
-			</div>
-		</div>
-		<div>
-		{index <= 3 ?
-			<button onClick={() => setIndex(index + 1)}>+</button>
-			:
-			<p></p>
-			}
-		</div>
-		<div>
-			{index >= 1 ?
-			<button onClick={() => setIndex(index - 1)}>-</button>
-			:
-			<p></p>
-			}
-		</div>
 		<div className="App" style={{ position: "relative", overflow: "hidden" }}>
 			<div style={{ position: "absolute" }}>
 				<Particles
@@ -60,6 +38,25 @@ function App() {
 				/>
 			</div>
 		</div>
+	    <NavBar/>
+	    <div style={{height: "1000px", display: 'flex'}} className="justify-content-between">
+			<div className="d-flex align-items-center justify-content-center p-2">
+				{index >= 1 ?
+				<img style={{height: 100}} className='arrow-left' src={Arrow} onClick={() => setIndex(index - 1)}/>
+				:
+				<p></p>
+				}
+			</div>
+			<div className="d-flex align-items-center justify-content-center">
+				{page[index]}
+			</div>
+			<div className="d-flex align-items-center justify-content-center p-2">
+				{index <= 3 ?
+				<img style={{height: 100}} src={Arrow} onClick={() => setIndex(index + 1)}/>
+				:
+				<p></p>
+				}
+			</div>
 	  </div>
 	</div>
   );
