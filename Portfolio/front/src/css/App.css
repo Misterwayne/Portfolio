@@ -1,0 +1,17 @@
+.nextPage {
+    height: 1300px;
+    width: 100px;
+}
+
+.prevPage {
+    height: 1300px;
+    width: 100px;
+}
+
+.nextPage:hover {
+    background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,255,255,0.3));
+}
+
+.prevPage:hover {
+    background-image: linear-gradient(to left, rgba(255,0,0,0), rgba(255,255,255,0.3));
+}

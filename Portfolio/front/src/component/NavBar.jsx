@@ -1,22 +1,28 @@
 import React from 'react';
-import axios from 'axios';
 
 
 function NavBar()
 {
-    const Logout = async() =>{
+    const getCV = async () => {
         try {
-            await axios.get("http://localhost:3001/logout")
-            .then(response => {
-                window.location.reload(false);
-                console.log(response.cookie)
+            fetch('CV2023.pdf').then(response => {
+                response.blob().then(blob => {
+
+                    const fileURL = window.URL.createObjectURL(blob);
+                    // Setting various property values
+                    let alink = document.createElement('a');
+                    alink.href = fileURL;
+                    alink.download = 'CV_Malick_Wane.pdf';
+                    alink.click();
+                })
             });
         }
         catch (error)
         {
-            console.log("error: exp failed")
+            console.log("error: comp failed");
         }
     }
+
     return (
         <nav class="navbar sticky-top navbar-expand-sm bg-dark" data-bs-theme="dark">
             <div class="container-fluid">
@@ -27,13 +33,10 @@ function NavBar()
                 <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                    <a class="nav-link" href="#experience">Competence</a>
+                    <a class="nav-link" href="https://github.com/Misterwayne">Github</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="#competence">Experience</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="#formation">Formation</a>
+                    <div class="nav-link" onClick={() => {getCV()}}>CV</div>
                     </li>
                     <li className='nav-item ml-auto'>
                     </li>

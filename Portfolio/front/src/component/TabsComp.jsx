@@ -13,6 +13,7 @@ export default function Tabs() {
     const [ToggleState, setToggleState] = useState(1);
     const [Comp, setData] = useState([]);
     const [show, setShow] = useState(false);
+    const [Modalname, setName] = useState("")
 
     const web = Comp.filter((elem) => elem.type === "Web");
     const algo = Comp.filter((elem) => elem.type === "Algorithme");
@@ -41,25 +42,34 @@ export default function Tabs() {
     }
 
 
-    const Modal = ({ handleClose, show, children }) => {
-        const showHideClassName = show ? 'modal display-block' : 'modal display-none'
-      
-        return (
-          <div className={showHideClassName}>
+    const Modal = ({ handleClose, show, name, children }) => {
+        let showHideClassName = show ? 'modal display-block' : 'modal display-none';
+        if (Modalname === name)
+        {
+
+            return (
+                <div className={showHideClassName}>
             <section className='modal-main'>
               {children}
               <button
                 onClick={() => handleClose()}
-              >
+                >
                 Close
               </button>
             </section>
           </div>
         );
+        }
+        else{
+            return (
+                <div></div>
+            );
+        }
     };
 
-    const showModal = () => {
+    const showModal = (name) => {
         setShow(!show);
+        setName(name);
     }
 
     const hideModal = () => {
@@ -99,11 +109,12 @@ export default function Tabs() {
             <div className="active-content">
                 {array[ToggleState - 1].map(({name, description, type, language, link}) => {
                 return (
-                    <div className="p-2" onClick={() => showModal()}>
+                    <div className="p-2" onClick={() => showModal(name)}>
                         <div className="card" style={{overflow: "hidden", height: 250, width: 250}}>
-                            <Modal show={show} handleClose={() => hideModal()} >
+                            <Modal show={show} handleClose={() => hideModal()} name={name} >
                                 <p>{name}</p>
                                 <p>{description}</p>
+                                <p><a href={link} className="pulse">github</a></p>
                             </Modal>
                             {{
                             'C': <img className="card-img-top" style={{height:100, width:100}} src={C_Icon} alt="language icon" />,
@@ -116,7 +127,6 @@ export default function Tabs() {
                             <div className="card-body">
                                 <h5 className="card-title">{name}</h5>
                                 <h6 className="card-subtitle mb-2 text-muted">{language}</h6>
-                                <a href={link} className="pulse">github</a>
                             </div>
                         </div>
                     </div>

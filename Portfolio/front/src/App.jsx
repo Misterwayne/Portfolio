@@ -39,10 +39,10 @@ function App() {
 			</div>
 		</div>
 	    <NavBar/>
-	    <div style={{height: "1000px", display: 'flex'}} className="justify-content-between">
-			<div className="d-flex align-items-center justify-content-center p-2">
+	    <div style={{height: "60%", display: 'flex'}} className="justify-content-between">
+			<div className="d-flex align-items-center justify-content-center" style={{height: "100%"}}>
 				{index >= 1 ?
-				<img style={{height: 100}} className='arrow-left' src={Arrow} onClick={() => setIndex(index - 1)}/>
+				<div className="prevPage" onClick={() => setIndex(index - 1)}></div>
 				:
 				<p></p>
 				}
@@ -50,9 +50,9 @@ function App() {
 			<div className="d-flex align-items-center justify-content-center">
 				{page[index]}
 			</div>
-			<div className="d-flex align-items-center justify-content-center p-2">
+			<div className="d-flex align-items-center justify-content-center">
 				{index <= 3 ?
-				<img style={{height: 100}} src={Arrow} onClick={() => setIndex(index + 1)}/>
+				<div className="nextPage" onClick={() => setIndex(index + 1)}></div>
 				:
 				<p></p>
 				}

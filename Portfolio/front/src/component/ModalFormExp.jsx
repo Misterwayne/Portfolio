@@ -18,7 +18,7 @@ export default function MofalFormExp(){
         }
 
         event.preventDefault();
-        axios.post('http://localhost:3001/exp', inputs, {header})
+        axios.post('http://localhost:3001/compt', inputs, {header})
         .then()
         .catch(error => {
             console.error('There was an error!', error);

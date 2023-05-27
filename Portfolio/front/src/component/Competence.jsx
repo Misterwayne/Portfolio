@@ -2,6 +2,7 @@ import React from 'react';
 import "../css/button-animation.css"
 import "../css/text-animation.css"
 import Tabs from "./TabsComp";
+import MofalFormComp from './ModalCompetence';
 
 
 function Competence()
