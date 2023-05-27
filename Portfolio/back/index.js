@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const cors = require('cors');
+const path = require("path");
 const {getExp, postExp} = require("./reqExp");
 const {getCompt, postCompt} = require('./reqCompt');
 const {getForm, postForm} = require('./reqForm');
@@ -20,9 +21,12 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors({ origin:true, credentials:true }));
+app.use(express.static(path.join(__dirname, "./build")));
 
 app.get("/", (req, res) => {
-    console.log('Default call')
+    res.sendFile(
+        path.join(__dirname, "./build/index.html")
+      );
 })
 
 app.get("/exp", getExp);
